@@ -1,0 +1,15 @@
+/Users/wahid/Developer/vscode/bootcamp/lesson2/bin/Debug/net5.0/lesson2.deps.json
+/Users/wahid/Developer/vscode/bootcamp/lesson2/bin/Debug/net5.0/lesson2.runtimeconfig.json
+/Users/wahid/Developer/vscode/bootcamp/lesson2/bin/Debug/net5.0/lesson2.runtimeconfig.dev.json
+/Users/wahid/Developer/vscode/bootcamp/lesson2/bin/Debug/net5.0/lesson2.dll
+/Users/wahid/Developer/vscode/bootcamp/lesson2/bin/Debug/net5.0/ref/lesson2.dll
+/Users/wahid/Developer/vscode/bootcamp/lesson2/bin/Debug/net5.0/lesson2.pdb
+/Users/wahid/Developer/vscode/bootcamp/lesson2/obj/Debug/net5.0/lesson2.csproj.AssemblyReference.cache
+/Users/wahid/Developer/vscode/bootcamp/lesson2/obj/Debug/net5.0/lesson2.GeneratedMSBuildEditorConfig.editorconfig
+/Users/wahid/Developer/vscode/bootcamp/lesson2/obj/Debug/net5.0/lesson2.AssemblyInfoInputs.cache
+/Users/wahid/Developer/vscode/bootcamp/lesson2/obj/Debug/net5.0/lesson2.AssemblyInfo.cs
+/Users/wahid/Developer/vscode/bootcamp/lesson2/obj/Debug/net5.0/lesson2.csproj.CoreCompileInputs.cache
+/Users/wahid/Developer/vscode/bootcamp/lesson2/obj/Debug/net5.0/lesson2.dll
+/Users/wahid/Developer/vscode/bootcamp/lesson2/obj/Debug/net5.0/ref/lesson2.dll
+/Users/wahid/Developer/vscode/bootcamp/lesson2/obj/Debug/net5.0/lesson2.pdb
+/Users/wahid/Developer/vscode/bootcamp/lesson2/obj/Debug/net5.0/lesson2.genruntimeconfig.cache
