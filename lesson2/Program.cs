@@ -1,10 +1,45 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace lesson2
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
+        {
+            // int n = int.Parse(Console.ReadLine()) + 1;
+
+            // int sum = 0;
+            // while(n-->0)
+            // {
+            //     sum+=n;
+            // }
+            // Console.WriteLine($"{sum}");
+
+            // int n = int.Parse(Console.ReadLine());
+            // int sum = 0;
+
+            // for(int i = 0; i <= n; i++)
+            // {
+            //     sum+=i;
+            // }
+            // Console.WriteLine($"{sum}");
+
+            // var sonlar = new int[]{ 1, 2, 3, 4, 5, 6, 7 };
+            // foreach(int son in sonlar)
+            // {
+            //     Console.WriteLine($"{son}");
+            // }
+
+            var sonlar = Enumerable.Range(1, 7).ToList();
+            foreach(var son in sonlar)
+            {
+                Console.WriteLine($"{son}");
+            }
+        }
+
+        static void Main_Conditionals(string[] args)
         {
             // int? a = null;
             // string hechnima = string.Empty;
@@ -41,7 +76,8 @@ namespace lesson2
             var message = son switch
             {
                 > 0 => "Siz musbat son kiritdingiz!",
-                (< 0) => "Siz manfiy son kiritdingiz!",
+                (< 0) => "Siz manfiy son kiritdingiz!", // aslida skopka shart emas ekan
+        
                 _ => "Siz nol kiritdingiz!",
             };
 
