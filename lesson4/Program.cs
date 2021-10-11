@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.ComponentModel;
+using System;
 using System.Linq;
 
 namespace lesson4
@@ -12,7 +13,6 @@ namespace lesson4
         public NameNullException(string parameterName, string message)
             : base(parameterName, message)
         { }
-
 
     }
     
