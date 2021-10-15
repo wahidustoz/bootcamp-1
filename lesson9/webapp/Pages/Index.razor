@@ -1,0 +1,39 @@
+﻿@page "/"
+@using webapp.Components;
+
+<div class="row">
+    <div class="col-sm-12 col-md-6 mx-auto">
+        <div class="row">
+            <input class="col" placeholder="0.0" disabled @bind="InputValue">
+        </div>
+        <div class="row">
+            <Button Content="AC"/>
+            <Button Content="<-"/>
+            <Button Content="%"/>
+            <Button Content="/"/>
+        </div>
+        <div class="row">
+            <Button Content="7"/>
+            <Button Content="8"/>
+            <Button Content="9"/>
+            <Button Content="x"/>
+        </div>
+        <div class="row">
+            <Button Content="4"/>
+            <Button Content="5"/>
+            <Button Content="6"/>
+            <Button Content="-"/>
+        </div>
+        <div class="row">
+            <Button Content="1" @ref="One"/>
+            <Button Content="2" @ref="Two"/>
+            <Button Content="3"/>
+            <Button Content="+"/>
+        </div>
+        <div class="row">
+            <Button Content="0"/>
+            <Button Content="."/>
+            <Button Content="=" CssClass="col-5"/>
+        </div>
+    </div>
+</div>
