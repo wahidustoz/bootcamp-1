@@ -5,8 +5,4 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="GoogleMaps.LocationServices" Version="1.2.0.5" />
-  </ItemGroup>
-
 </Project>

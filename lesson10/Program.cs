@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using lesson10.Dto.PrayerTime;
 using lesson10.Dto.User;
 using lesson10.Services;
+using GoogleMaps.LocationService;
 
 namespace lesson10
 {
@@ -11,6 +12,7 @@ namespace lesson10
     {
         private static string usersApi = "https://randomuser.me/api/";
         private static string prayerTimeApi = "http://api.aladhan.com/v1/timingsByCity?city=Tashkent&country=Uzbekistan&method=8";
+        
         static async Task Main(string[] args)
         {
             var httpService = new HttpClientService();
