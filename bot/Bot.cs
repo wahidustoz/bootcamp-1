@@ -1,10 +1,9 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
-using Telegram.Bot.Args;
+using Telegram.Bot.Extensions.Polling;
 
 namespace bot
 {
@@ -18,14 +17,7 @@ namespace bot
         {
             _botClient = client;
             _logger = logger;
-            _botClient.OnMessage += HandleMessageReceived;
-            _botClient.StartReceiving();
-        }
-
-        private void HandleMessageReceived(object sender, MessageEventArgs e)
-        {
-            var message = e.Message;
-            _logger.LogInformation($"{message.From.FirstName} @{message.From.Username} sent a message: \n{message.Text}");
+            _botClient.StartReceiving(new DefaultUpdateHandler(Handlers.HandleUpdateAsync, Handlers.HandleErrorAsync), new CancellationToken());
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
