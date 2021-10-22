@@ -5,12 +5,7 @@ namespace bot
 {
     public class MessageBuilder
     {
-        public string GreetingMessage()
-        {
-            return "Hello World";
-        }
-
-        public ReplyKeyboardMarkup LocationRequestButton()
+        public static ReplyKeyboardMarkup LocationRequestButton()
             => new ReplyKeyboardMarkup()
             {
                 Keyboard = new List<List<KeyboardButton>>()
@@ -20,7 +15,8 @@ namespace bot
                                     new KeyboardButton(){ Text = "Share", RequestLocation = true },
                                     new KeyboardButton(){ Text = "Cancel" } 
                                 }
-                            }
+                            },
+                ResizeKeyboard = true
             };
     }
 }
