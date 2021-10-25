@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using bot.Entity;
+using bot.HttpClients;
 using bot.Services;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
@@ -15,11 +16,16 @@ namespace bot
     {
         private readonly ILogger<Handlers> _logger;
         private readonly IStorageService _storage;
+        private readonly ICacheService _cache;
 
-        public Handlers(ILogger<Handlers> logger, IStorageService storage)
+        public Handlers(
+            ILogger<Handlers> logger, 
+            IStorageService storage,
+            ICacheService cache)
         {
             _logger = logger;
             _storage = storage;
+            _cache = cache;
         }
 
         public Task HandleErrorAsync(ITelegramBotClient client, Exception exception, CancellationToken ctoken)
@@ -84,6 +90,26 @@ namespace bot
 
         private async Task BotOnMessageReceived(ITelegramBotClient client, Message message)
         {
+            if(message.Type == MessageType.Location && message.Location != null)
+            {
+                var result = await _cache.GetOrUpdatePrayerTimeAsync(message.Chat.Id, message.Location.Longitude, message.Location.Latitude);
+                var times = result.prayerTime;
+                await client.SendTextMessageAsync(
+                    chatId: message.Chat.Id,
+                    text: @$"
+*Fajr*: {times.Fajr}
+*Sunrise*: {times.Sunrise}
+*Dhuhr*: {times.Dhuhr}
+*Asr*: {times.Asr}
+*Maghrib*: {times.Maghrib}
+*Isha*: {times.Isha}
+*Midnight*: {times.Midnight}
+                    
+*Method*: {times.CalculationMethod}
+                    ",
+                    parseMode: ParseMode.Markdown);
+            }
+
             switch(message.Text)
             {
                 case "/start": 
