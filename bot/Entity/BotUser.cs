@@ -8,6 +8,8 @@ namespace bot.Entity
         [Key]
         public long ChatId { get; set; }
         public string Username { get; set; }
+
+        [MaxLength(255)]
         public string Fullname { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
