@@ -15,7 +15,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
+    <PackageReference Include="skiasharp" Version="2.80.3" />
     <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="0.2.0" />
+    <PackageReference Include="Topten.Richtextkit" Version="0.4.148" />
   </ItemGroup>
 
 </Project>

@@ -1,14 +1,17 @@
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using bot.Entity;
 using bot.HttpClients;
 using bot.Services;
 using Microsoft.Extensions.Logging;
+using SkiaSharp;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Topten.RichTextKit;
 
 namespace bot
 {
@@ -94,20 +97,16 @@ namespace bot
             {
                 var result = await _cache.GetOrUpdatePrayerTimeAsync(message.Chat.Id, message.Location.Longitude, message.Location.Latitude);
                 var times = result.prayerTime;
-                await client.SendTextMessageAsync(
-                    chatId: message.Chat.Id,
-                    text: @$"
-*Fajr*: {times.Fajr}
-*Sunrise*: {times.Sunrise}
-*Dhuhr*: {times.Dhuhr}
-*Asr*: {times.Asr}
-*Maghrib*: {times.Maghrib}
-*Isha*: {times.Isha}
-*Midnight*: {times.Midnight}
-                    
-*Method*: {times.CalculationMethod}
-                    ",
-                    parseMode: ParseMode.Markdown);
+
+                await client.SendPhotoAsync(
+                    chatId:message.Chat.Id,
+                    getImageFile(times));
+
+                // string timeString = getTimeString(result.prayerTime);
+                // await client.SendTextMessageAsync(
+                //     chatId: message.Chat.Id,
+                //     text: timeString,
+                //     parseMode: ParseMode.Markdown);
             }
 
             switch(message.Text)
@@ -146,5 +145,49 @@ namespace bot
                     break;
             }
         }
+
+        private Stream getImageFile(Models.PrayerTime times)
+        {
+            var text = getTimeString(times);
+            using (var surface = SKSurface.Create(new SKImageInfo(500, 500)))
+            {
+                Draw(surface, text);
+                
+                using var image = surface.Snapshot();
+                using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+
+                return data.AsStream();
+            }
+        }
+
+        private void Draw(SKSurface surface, string text)
+        {
+            var canvas = surface.Canvas;
+            canvas.Clear(SKColors.LightGray);
+
+            // Find the canvas bounds
+            var canvasBounds = canvas.DeviceClipBounds;
+
+            // Create the text block
+            var tb = new TextBlock();
+
+            // Configure layout properties
+            tb.MaxWidth = canvasBounds.Width * 0.8f;
+            tb.Alignment = TextAlignment.Left;
+
+            var style = new Style()
+            {
+                FontSize = 24
+            };
+
+            // Add text to the text block
+            tb.AddText(text, style);
+
+            // Paint the text block
+            tb.Paint(canvas, new SKPoint(canvasBounds.Width * 0.1f, canvasBounds.Height * 0.1f));
+        }
+
+        private string getTimeString(Models.PrayerTime times)
+            => $" *Fajr*: {times.Fajr}\n*Sunrise*: {times.Sunrise}\n*Dhuhr*: {times.Dhuhr}\n*Asr*: {times.Asr}\n*Maghrib*: {times.Maghrib}\n*Isha*: {times.Isha}\n*Midnight*: {times.Midnight}\n\n*Method*: {times.CalculationMethod}";
     }
 }
