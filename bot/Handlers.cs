@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using bot.Entity;
 using bot.HttpClients;
 using bot.Services;
+using CoreHtmlToImage;
 using Microsoft.Extensions.Logging;
 using SkiaSharp;
 using Telegram.Bot;
