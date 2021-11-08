@@ -23,15 +23,15 @@ namespace tasks.Model
 
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public ETaskStatus Status { get; set; }
+        public ETaskStatus? Status { get; set; }
 
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public ETaskRepeat Repeat { get; set; }
+        public ETaskRepeat? Repeat { get; set; }
         
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public ETaskPriority Priority { get; set; }
+        public ETaskPriority? Priority { get; set; }
 
         public TaskLocation Location { get; set; }
 
