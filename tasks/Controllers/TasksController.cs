@@ -14,5 +14,12 @@ namespace tasks.Controllers
         {
             return Ok(newTask);
         }
+
+        [HttpGet]
+        public IActionResult QueryTasks([FromQuery]TaskQuery query)
+        // public IActionResult QueryTasks([FromQuery]string title, [FromQuery]string id)
+        {
+            return Ok(query);
+        }
     }
 }
