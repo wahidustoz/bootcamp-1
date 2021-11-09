@@ -7,23 +7,15 @@ namespace tasks.Mapper
             return new Entity.Task(
                 title: newTask.Title,
                 description: newTask.Description,
-                tags: string.Join(',', newTask.Tags),
-                location: string.Format($"{newTask.Location.Latitude},{newTask.Location.Longitude}"),
+                tags: newTask.Tags is null ? string.Empty : string.Join(',', newTask.Tags),
+                location: newTask.Location is null ? string.Empty : string.Format($"{newTask.Location.Latitude},{newTask.Location.Longitude}"),
                 atATime: newTask.AtATime,
                 onADay: newTask.OnADay,
-                repeat: newTask.Repeat.Value.ToEntityETaskRepeat()
-                // TO-DO: Finish remaining properties.
+                repeat: newTask.Repeat.ToEntityETaskRepeat(),
+                status: newTask.Status.ToEntityETaskStatus(),
+                priority: newTask.Priority.ToEntityETaskPriority(),
+                url: newTask.Url
             );
-        }
-
-        public static Entity.ETaskRepeat ToEntityETaskRepeat(this Model.ETaskRepeat repeat)
-        {
-            return repeat switch
-            {
-                Model.ETaskRepeat.Daily => Entity.ETaskRepeat.Daily,
-                // TO-DO: Finish remaining values
-                _ => Entity.ETaskRepeat.Never
-            };
         }
     }
 }

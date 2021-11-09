@@ -8,7 +8,7 @@ namespace tasks.Model
         [FromQuery]
         public string Title { get; set; }
         [FromQuery]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         [FromQuery]
         public string Priority { get; set; }
         [FromQuery]
