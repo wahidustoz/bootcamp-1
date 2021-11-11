@@ -106,5 +106,27 @@ namespace tasks.Services
                 return (false, e);
             }
         }
+
+        public async Task<(bool isSuccess, Exception exception)> UpdateTaskAsync(Entity.Task task)
+        {
+            try
+            {
+                if(await _context.Tasks.AnyAsync(t => t.Id == task.Id))
+                {
+                    _context.Tasks.Update(task);
+                    await _context.SaveChangesAsync();
+
+                    return (true, null);
+                }
+                else
+                {
+                    return (false, new Exception($"Task with given ID: {task.Id} doesnt exist!"));
+                }
+            }
+            catch(Exception e)
+            {
+                return (false, e);
+            }
+        }
     }
 }

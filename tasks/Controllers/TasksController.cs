@@ -51,5 +51,19 @@ namespace tasks.Controllers
 
             return NotFound("No tasks exist!");
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateTaskAsync([FromBody]UpdatedTask updatedTask)
+        {
+            var entity = updatedTask.ToTaskEntity();
+            var updateResult = await _storage.UpdateTaskAsync(entity);
+
+            if(updateResult.isSuccess)
+            {
+                return Ok();
+            }
+
+            return BadRequest(updateResult.exception.Message);
+        }
     }
 }

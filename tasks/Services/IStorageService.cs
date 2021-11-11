@@ -20,5 +20,7 @@ namespace tasks.Services
             DateTimeOffset atATime = default(DateTimeOffset),
             string location = default(string),
             string url = default(string));
+        
+        Task<(bool isSuccess, Exception exception)> UpdateTaskAsync(Entity.Task task);
     }
 }
