@@ -21,7 +21,7 @@ public class PizzaRequest
     public double Price { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public EStockStatus Status { get; set; }
+    public Models.EStockStatus Status { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; }
 
