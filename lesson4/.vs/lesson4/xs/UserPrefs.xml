@@ -7,11 +7,12 @@
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="lesson4" expanded="True">
-            <Node name="lesson4" expanded="True">
-              <Node name="Program.cs" selected="True" />
-            </Node>
+            <Node name="lesson4" expanded="True" />
           </Node>
         </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
