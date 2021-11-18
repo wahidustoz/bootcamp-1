@@ -15,18 +15,18 @@ public class GenreService : IGenreService
         _logger = logger;
     }
     
-    public async Task<(bool IsSuccess, Exception Exception)> CreateAsync(Genre genre)
+    public async Task<(bool IsSuccess, Exception Exception, Genre Genre)> CreateAsync(Genre genre)
     {
         try
         {
             await _ctx.Genres.AddAsync(genre);
             await _ctx.SaveChangesAsync();
 
-            return (true, null);
+            return (true, null, genre);
         }
         catch(Exception e)
         {
-            return (false, e);
+            return (false, e, null);
         }
     }
 
@@ -53,6 +53,9 @@ public class GenreService : IGenreService
 
     public Task<bool> ExistsAsync(Guid id)
         => _ctx.Genres.AnyAsync(g => g.Id == id);
+
+    public Task<bool> ExistsAsync(string name)
+        => _ctx.Genres.AnyAsync(g => g.Name == name);
 
     public Task<Genre> GetAsync(Guid id)
         => _ctx.Genres.FirstOrDefaultAsync(g => g.Id == id);

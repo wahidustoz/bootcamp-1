@@ -13,4 +13,13 @@ public class MoviesContext : DbContext
     
     public MoviesContext(DbContextOptions options)
         : base(options) { }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Genre>()
+            .HasIndex(g => g.Name)
+            .IsUnique();
+    }
 }

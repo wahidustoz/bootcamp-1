@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace movies.Entities;
 
@@ -15,5 +16,6 @@ public class Actor
     [Required]
     public DateTimeOffset Birthdate { get; set; }
     
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ICollection<Movie> Movies { get; set; }
 }
