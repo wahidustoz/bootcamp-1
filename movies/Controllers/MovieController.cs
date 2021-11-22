@@ -1,6 +1,8 @@
+using System.Net.Mime;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using movies.Entities;
 using movies.Mappers;
 using movies.Models;
 using movies.Services;
@@ -67,5 +69,100 @@ public class MovieController : ControllerBase
 
         var json = JsonSerializer.Serialize(await _ms.GetAllAsync(), options);
         return Ok(json);
+    }
+
+    [HttpPost]
+    [Route("{id}/images")]
+    public async Task<IActionResult> PostImagesAsync(Guid id, IEnumerable<IFormFile> files)
+    {
+        if(!await _ms.ExistsAsync(id))
+        {
+            return NotFound("Movie with given ID does not exist!");
+        }
+
+        var extensions = new string[] { ".jpg", ".png", ".svg", ".mp4" };
+        var fileSize = 5242880; // 5MB in bytes
+
+        if(files.Count() < 1 || files.Count() > 5)
+        {
+            return BadRequest("Can upload 1~5 files at a time.");
+        }
+
+        // extension validation
+        foreach(var file in files)
+        {
+            var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if(!extensions.Contains(fileExtension))
+            {
+                return BadRequest($"{fileExtension} format file not allowed!");
+            }
+
+            if(file.Length > fileSize)
+            {
+                return BadRequest($"Max file size 5MB!");
+            }
+        }
+
+        var images = files.Select(f => 
+        {
+            using var stream = new MemoryStream();
+            f.CopyTo(stream);
+
+            return new Image()
+            {
+                Id = Guid.NewGuid(),
+                Data = stream.ToArray(),
+                ContentType = f.ContentType,
+                AltText = string.Empty,
+                MovieId = id
+            };
+        }).ToList();
+
+        await _ms.CreateImagesAsync(images);
+
+        return Ok();
+        // var filesArray = files.Select(f => 
+        // {
+        //     using var stream = new MemoryStream();
+        //     f.CopyTo(stream);
+
+        //     return stream.ToArray();
+        // }).ToList();
+
+        // return File(new MemoryStream(filesArray[0]), files.First().ContentType);
+    }
+
+    [HttpGet("{movieId}/images/{imageId}")]
+    public async Task<IActionResult> GetImageAsync(Guid movieId, Guid imageId)
+    {
+        if(!await _ms.ExistsAsync(movieId) || !await _ms.ImageExistsAsync(imageId))
+        {
+            return NotFound();
+        }
+
+        var image = await _ms.GetImageAsync(imageId);
+
+        return File(new MemoryStream(image.Data), image.ContentType);
+    }
+
+    [HttpGet("{movieId}/images")]
+    public async Task<IActionResult> GetImageAsync(Guid movieId)
+    {
+        if(!await _ms.ExistsAsync(movieId))
+        {
+            return NotFound();
+        }
+
+        var images = await _ms.GetImagesAsync(movieId);
+
+        return Ok(images.Select(i =>
+        {
+            return new 
+            {
+                ContentType = i.ContentType,
+                Size = i.Data.Length,
+                Id = i.Id
+            };
+        }));
     }
 }

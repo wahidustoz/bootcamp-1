@@ -10,6 +10,10 @@ public interface IMovieService
     Task<List<Movie>> GetAllAsync(string title);
     Task<(bool IsSuccess, Exception Exception)> DeleteAsync(Guid id);
     Task<bool> ExistsAsync(Guid id);
+    Task<(bool IsSuccess, Exception Exception)> CreateImagesAsync(List<Image> images);
+    Task<Image> GetImageAsync(Guid id);
+    Task<List<Image>> GetImagesAsync(Guid id);
+    Task<bool> ImageExistsAsync(Guid id);
 
     // TODO: Update
 }

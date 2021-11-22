@@ -70,4 +70,31 @@ public class MovieService : IMovieService
 
     public Task<Movie> GetAsync(Guid id)
         => _ctx.Movies.FirstOrDefaultAsync(a => a.Id == id);
+
+    public async Task<(bool IsSuccess, Exception Exception)> CreateImagesAsync(List<Image> images)
+    {
+        try
+        {
+            await _ctx.Images.AddRangeAsync(images);
+            await _ctx.SaveChangesAsync();
+
+            return (true, null);
+        }
+        catch(Exception e)
+        {
+            return (false, e);
+        }
+    }
+
+    public Task<Image> GetImageAsync(Guid id)
+        => _ctx.Images.FirstOrDefaultAsync(i => i.Id == id);
+
+    public Task<List<Image>> GetImagesAsync(Guid id)
+        => _ctx.Images
+            .AsNoTracking()
+            .Where(i => i.MovieId == id)
+            .ToListAsync();
+
+    public Task<bool> ImageExistsAsync(Guid id)
+        => _ctx.Images.AnyAsync(i => i.Id == id);
 }
