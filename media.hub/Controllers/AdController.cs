@@ -5,9 +5,9 @@ using media.hub.entities;
 using media.hub.models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Cors;
 
 namespace media.hub.controllers;
-
 
 [ApiController]
 [Route("api/[controller]")]

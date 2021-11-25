@@ -11,19 +11,51 @@
 
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+
     <script>
         (function() {
-            var url = "https://localhost:7083/api/Ad"
+            var url = "https://localhost:7083/api/ad"
             var request = new XMLHttpRequest();
             request.responseType = 'json';
             request.open('GET', url);
 
             request.onload = function ()
             {
-                console.log(request.response)
+                console.log(request.response);
+                var ads = request.response;
+                insertAds(ads);
             }
 
             request.send();
+
+            function insertAds(ads)
+            {
+                var adsList = $.parseHTML("<ul id='ads-list'></ul>");
+
+                console.log(adsList)
+
+                $('#container').append(adsList);
+
+                for(var i = 0; i < ads.length; i++)
+                {
+                    var ad = $.parseHTML(`<li id='ad-${i}'><h3>${ads[i].title}</h3><h5>${ads[i].description}</h5></li>`);
+                    $('#ads-list').append(ad);
+
+                    ads[i].files.forEach(file => {
+                        if(file.contentType === 'image/png')
+                        {
+                            var img = $.parseHTML(`<img src='https://localhost:7083/media/${file.id}' width='300'>`);
+                            $(`#ad-${i}`).append(img)
+                        }
+                        else
+                        {
+                            var vid = $.parseHTML(`<video src='https://localhost:7083/media/${file.id}' autoplay='true' loop='true' width='300'>`);
+                            $(`#ad-${i}`).append(vid)
+                        }
+                    });
+                }
+            }
 
         })();
     </script>
