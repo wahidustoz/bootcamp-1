@@ -163,40 +163,46 @@ public class PostController : ControllerBase
         postEntity.Description = post.Description ?? string.Empty;
         postEntity.Content = post.Content ?? string.Empty;
 
-        if(post.MediaIds.Count() < 1 && postEntity.Medias != null)
-        {
-            postEntity.Medias
-            .ToList()
-            .ForEach(async m =>
-            {
-                await _mService.DeleteMediaAsync(m);
-            }); 
-        }
-        else if(!post.MediaIds.All(m => _mService.MediaExistsAsync(m).Result))
+        if(post.MediaIds.Count() > 0 && !post.MediaIds.All(m => _mService.MediaExistsAsync(m).Result))
         {
             return BadRequest("Given Media IDs do not exist");
         }
-        else
-        {
-            postEntity.Medias
-                .Where(m => !post.MediaIds.Any(id => id == m.Id))
-                .ToList()
-                .ForEach(async m => 
-                {
-                    await _mService.DeleteMediaAsync(m);
-                });
 
-            var newMedias = post.MediaIds
-                .Select(id => _mService.GetMediaByIdAsync(id).Result)
-                .ToList();
+        if(post.MediaIds.Count() > 0)
+        {
+            var medias = post.MediaIds.Select(id => _mService.GetMediaByIdAsync(id).Result).ToList();
             
-            newMedias.ForEach(m =>
+            if(postEntity.Medias == null )
+            {
+                postEntity.Medias = new List<Media>();
+            }
+            
+            medias.ForEach(m => 
             {
                 if(!postEntity.Medias.Contains(m))
                 {
                     postEntity.Medias.Add(m);
                 }
             });
+
+            var ms = postEntity.Medias
+                .Where(m => !post.MediaIds.Any(id => id == m.Id))
+                .ToList();
+            
+            ms?.ForEach(async m => 
+            {
+                await _mService.DeleteMediaAsync(m);
+            });
+
+        }
+        else if(postEntity.Medias != null)
+        {
+            postEntity.Medias
+                .ToList()
+                .ForEach(async m => 
+                {
+                    await _mService.DeleteMediaAsync(m);
+                });
         }
 
         postEntity.ModifiedAt = DateTimeOffset.UtcNow;
