@@ -14,8 +14,8 @@ public class PostModel
     [Required]
     public string Content { get; set; }
     
-    [Required]
-    public Guid HeaderImageId { get; set; }
+    // [Required]
+    public Guid? HeaderImageId { get; set; }
     
     [Required]
     public IEnumerable<Guid> MediaIds { get; set; }

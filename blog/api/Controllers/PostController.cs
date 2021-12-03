@@ -123,4 +123,89 @@ public class PostController : ControllerBase
 
         return BadRequest(result.Exception.Message);
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdatePostAsync([FromBody]PostModel post, [FromRoute]Guid id)
+    {
+        if(!await _pService.PostExistsAsync(id))
+        {
+            return NotFound(id);
+        }
+
+        var postEntity = await _pService.GetPostByIdAsync(id);
+        if(postEntity.HeaderImageId != post.HeaderImageId)
+        {
+            if(postEntity.HeaderImageId != default)
+            {
+                var headerImage = await _mService.GetMediaByIdAsync(postEntity.HeaderImageId.Value);
+                var result = await _mService.DeleteMediaAsync(headerImage);
+
+                if(!result.IsSuccess)
+                {
+                    return StatusCode(500, result.Exception.Message);
+                }
+
+                postEntity.HeaderImageId = null;
+            }
+
+            if(post.HeaderImageId != default && await _mService.MediaExistsAsync(post.HeaderImageId.Value))
+            {
+                postEntity.HeaderImageId = post.HeaderImageId;
+            }
+        }
+
+        if(string.IsNullOrWhiteSpace(post.Title) || string.IsNullOrWhiteSpace(post.Content))
+        {
+            return BadRequest("Title and Body of the post cannot be empty");
+        }
+
+        postEntity.Title = post.Title ?? string.Empty;
+        postEntity.Description = post.Description ?? string.Empty;
+        postEntity.Content = post.Content ?? string.Empty;
+
+        if(post.MediaIds.Count() < 1 && postEntity.Medias != null)
+        {
+            postEntity.Medias
+            .ToList()
+            .ForEach(async m =>
+            {
+                await _mService.DeleteMediaAsync(m);
+            }); 
+        }
+        else if(!post.MediaIds.All(m => _mService.MediaExistsAsync(m).Result))
+        {
+            return BadRequest("Given Media IDs do not exist");
+        }
+        else
+        {
+            postEntity.Medias
+                .Where(m => !post.MediaIds.Any(id => id == m.Id))
+                .ToList()
+                .ForEach(async m => 
+                {
+                    await _mService.DeleteMediaAsync(m);
+                });
+
+            var newMedias = post.MediaIds
+                .Select(id => _mService.GetMediaByIdAsync(id).Result)
+                .ToList();
+            
+            newMedias.ForEach(m =>
+            {
+                if(!postEntity.Medias.Contains(m))
+                {
+                    postEntity.Medias.Add(m);
+                }
+            });
+        }
+
+        postEntity.ModifiedAt = DateTimeOffset.UtcNow;
+
+        var res = await _pService.UpdatePostAsync(postEntity);
+        if(res.IsSuccess)
+        {
+            return Ok();
+        }
+        return BadRequest(res.Exception.Message);
+    }
 }

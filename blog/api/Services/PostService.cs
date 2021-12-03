@@ -40,6 +40,7 @@ public class PostService : IPostService
             .Skip(skip)
             .Take(take)
             .Include(p => p.Comments)
+            .Include(p => p.Medias)
             .ToListAsync();
 
     public async Task<(bool IsSuccess, Exception Exception)> InsertPostAsync(Post post)
