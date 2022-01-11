@@ -38,4 +38,10 @@ public class BlogsController : Controller
             }
         });
     }
+
+    [HttpGet("write")]
+    public IActionResult Write()
+    {
+        return View();
+    }
 }
