@@ -1,8 +1,16 @@
-<div class="container my-5">
-  <div id="title-editor">
+@model intro.Controllers.PostViewModel
 
-  </div>
-  <div id="editor">
+<form asp-action="Write" asp-controller="Blogs" method="post" id="form">
+  <div class="container my-5">
 
+    <div class="d-inline mx-2">
+      <input asp-for="Content" id="content" hidden="true">
+      <input asp-for="Title" id="post-title" class="bg-light border-0 w-75" placeholder="Title ...">
+      <button type="submit" class="btn btn-outline-secondary mr-auto">Publish</button>
+    </div>
+    <div id="editor">
+
+    </div>
   </div>
-</div>
+</form>
+

@@ -31,10 +31,18 @@ var quill = new Quill('#editor', {
   theme: 'bubble'
 });
 
-var quill = new Quill('#title-editor', {
-  modules: {
-    toolbar: toolbarOptions
-  },
-  placeholder: 'Title..',
-  theme: 'bubble'
-});
+
+document.addEventListener('DOMContentLoaded', function(event) {
+
+
+  var content = document.getElementById('content');
+  
+  quill.container.firstChild.innerHTML = content.value
+
+  var form = document.getElementById('form');
+  form.onsubmit = function () {
+      // Populate hidden form on submit
+      content.value = quill.root.innerHTML;
+  };
+})
+

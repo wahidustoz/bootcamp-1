@@ -6,6 +6,8 @@ namespace intro.Controllers;
 [Route("")]
 public class BlogsController : Controller
 {
+    private static List<PostViewModel> Blogs = new List<PostViewModel>();
+
     [HttpGet("blogs")]
     public IActionResult GetBlogs()
     {
@@ -44,4 +46,45 @@ public class BlogsController : Controller
     {
         return View();
     }
+
+    [HttpPost("write")]
+    public IActionResult Write([FromForm]PostViewModel model)
+    {
+        model.Edited = model.CreatedAt != default;
+        model.CreatedAt = DateTimeOffset.UtcNow;
+        model.Id = Guid.NewGuid();
+
+        Blogs.Add(model);
+
+        return LocalRedirect($"~/posts/{model.Id}");
+    }
+
+    [HttpGet("posts/{id}")]
+    public IActionResult Posts(Guid id)
+    {
+        var model = Blogs.FirstOrDefault(p => p.Id == id);
+        return View(model);
+    }
+
+    [HttpGet("edit/{id}")]
+    public IActionResult Edit(Guid id)
+    {
+        var model = Blogs.FirstOrDefault(p => p.Id == id);
+
+        return View("Write", model);
+    }
+}
+
+public class PostViewModel
+{
+    public Guid Id { get; set; }
+    
+    public DateTimeOffset CreatedAt { get; set; }
+    
+    public string Title { get; set; }
+    
+    public string Content { get; set; }
+
+    public bool Edited { get; set; }
+    
 }

@@ -1,0 +1,16 @@
+@model intro.Controllers.PostViewModel
+
+  <div class="container my-5">
+
+    <div class="d-inline mx-2">
+      <h2 class="bg-light">@Model.Title</h2>
+      <a class="btn btn-outline-primary" href="/edit/@Model.Id">Edit</a>
+    </div>
+    <span class="text-muted" >@Model.CreatedAt</span>
+    @if(Model.Edited)
+    {
+      <span class="text-muted" >Edited</span>
+    }
+    @Html.Raw(Model.Content)
+  </div>
+
