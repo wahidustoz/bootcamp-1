@@ -10,3 +10,10 @@
 #post-title:focus{
   outline: none;
 }
+
+pre {
+  padding: 2px;
+  border-radius: 2px;
+  background-color: black;
+  color: white;
+}

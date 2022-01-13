@@ -1,4 +1,5 @@
 using intro.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace intro.Controllers;
@@ -41,12 +42,14 @@ public class BlogsController : Controller
         });
     }
 
+    [Authorize]
     [HttpGet("write")]
     public IActionResult Write()
     {
         return View();
     }
 
+    [Authorize]
     [HttpPost("write")]
     public IActionResult Write([FromForm]PostViewModel model)
     {

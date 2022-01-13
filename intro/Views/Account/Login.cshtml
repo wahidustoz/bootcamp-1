@@ -1,0 +1,13 @@
+@model intro.ViewModels.LoginViewModel
+
+<input hidden="true" asp-for="ReturnUrl">
+
+<form class="mt-5 col"  method="post" asp-action="Login" asp-controller="Account">
+    <label asp-for="Email"></label>
+    <input asp-for="Email">
+
+    <label asp-for="Password"></label>
+    <input asp-for="Password">
+
+    <button type="submit">Login</button>
+</form>
