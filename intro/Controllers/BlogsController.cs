@@ -1,44 +1,42 @@
+using intro.Data;
+using intro.Entity;
 using intro.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace intro.Controllers;
 
 [Route("")]
 public class BlogsController : Controller
 {
-    private static List<PostViewModel> Blogs = new List<PostViewModel>();
+    private readonly ILogger<BlogsController> _logger;
+    private readonly BlogAppDbContext _context;
+    private readonly UserManager<User> _userM;
+
+    public BlogsController(
+        ILogger<BlogsController> logger,
+        BlogAppDbContext context,
+        UserManager<User> userManager)
+    {
+        _logger = logger;
+        _context = context;
+        _userM = userManager;
+    }
 
     [HttpGet("blogs")]
-    public IActionResult GetBlogs()
+    public async Task<IActionResult> GetBlogs()
     {
         return View(new BlogsViewModel()
         {
-            Blogs = new List<BlogViewModel>()
+            Blogs = await _context.Posts.Select(p => new BlogViewModel()
             {
-                new BlogViewModel()
-                {
-                    Id = Guid.NewGuid(),
-                    Title = "Introduction to Web3 with .NET",
-                    Description = "In this post u will learn how to create web3 solutions using .NET 👀.",
-                    Tags = new List<string>()
-                    {
-                        "dotnet", "web3", "ilmhub"
-                    },
-                    BannerImageUrl = "https://placekitten.com/200/250"
-                },
-                new BlogViewModel()
-                {
-                    Id = Guid.NewGuid(),
-                    Title = "Advanced Pishak placeholder generation",
-                    Description = "Pishak bu o'zbek tilining voxa shevasida mushuk 🐈 manosini anglatadi.",
-                    Tags = new List<string>()
-                    {
-                        "pishak", "mushu", "mishiq", "cat", "koshka"
-                    },
-                    BannerImageUrl = "https://placekitten.com/200/250"
-                }
-            }
+                Id = p.Id,
+                Title = p.Title,
+                Description = p.Content
+            })
+            .ToListAsync()
         });
     }
 
@@ -51,43 +49,71 @@ public class BlogsController : Controller
 
     [Authorize]
     [HttpPost("write")]
-    public IActionResult Write([FromForm]PostViewModel model)
+    public async Task<IActionResult> Write([FromForm]PostViewModel model)
     {
-        model.Edited = model.CreatedAt != default;
-        model.CreatedAt = DateTimeOffset.UtcNow;
-        model.Id = Guid.NewGuid();
+        if(!ModelState.IsValid)
+        {
+            return BadRequest($"{ModelState.ErrorCount} errors detected!");
+        }
 
-        Blogs.Add(model);
+        if(model.Edited)
+        {
+            var post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == model.Id);
+            if(post.Title == model.Title && post.Content == model.Content)
+            {
+                return LocalRedirect($"~/post/{post.Id}");
+            }
 
-        return LocalRedirect($"~/posts/{model.Id}");
+            post.ModifiedAt = DateTimeOffset.UtcNow;
+            post.Title = model.Title;
+            post.Content = model.Content;
+
+            _context.Posts.Update(post);
+            await _context.SaveChangesAsync();
+
+            return LocalRedirect($"~/post/{post.Id}");
+        }
+
+        var userId = _userM.GetUserId(User);
+        var newPost = new Post(model.Title, model.Content, Guid.Parse(userId));
+
+        _context.Posts.Add(newPost);
+        await _context.SaveChangesAsync();
+
+        return LocalRedirect($"~/post/{newPost.Id}");
     }
 
-    [HttpGet("posts/{id}")]
-    public IActionResult Posts(Guid id)
+    [HttpGet("post/{id}")]
+    public async Task<IActionResult> Post(Guid id)
     {
-        var model = Blogs.FirstOrDefault(p => p.Id == id);
+        var post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == id);
+        var model = new PostViewModel()
+        {
+            Id = post.Id,
+            Title = post.Title,
+            Content = post.Content,
+            Edited = post.Edited,
+            Claps = post.Claps,
+            CreatedAt = post.CreatedAt
+        };
+    
         return View(model);
     }
 
     [HttpGet("edit/{id}")]
-    public IActionResult Edit(Guid id)
+    public async Task<IActionResult> Edit(Guid id)
     {
-        var model = Blogs.FirstOrDefault(p => p.Id == id);
+        var post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == id);
+        var model = new PostViewModel()
+        {
+            Id = post.Id,
+            Title = post.Title,
+            Content = post.Content,
+            Edited = true,
+            Claps = post.Claps,
+            CreatedAt = post.CreatedAt
+        };
 
         return View("Write", model);
     }
-}
-
-public class PostViewModel
-{
-    public Guid Id { get; set; }
-    
-    public DateTimeOffset CreatedAt { get; set; }
-    
-    public string Title { get; set; }
-    
-    public string Content { get; set; }
-
-    public bool Edited { get; set; }
-    
 }

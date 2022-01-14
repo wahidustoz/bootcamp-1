@@ -9,5 +9,4 @@ public class BlogViewModel
     public string Description { get; set; }
     
     public IEnumerable<string> Tags { get; set; }
-    
 }

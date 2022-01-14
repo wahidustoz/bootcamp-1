@@ -1,6 +1,8 @@
-@model intro.Controllers.PostViewModel
+@model intro.ViewModels.PostViewModel
 
 <form asp-action="Write" asp-controller="Blogs" method="post" id="form">
+  <input hidden="true" asp-for="@Model.Edited">
+  <input hidden="true" asp-for="@Model.Id">
   <div class="container my-5">
 
     <div class="d-inline mx-2">

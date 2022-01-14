@@ -14,21 +14,21 @@ else
     <div class="row mx-4">
     @foreach(var blog in Model.Blogs)
     {
-    <div class="col-md-6">
-        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-            <div class="col p-4 d-flex flex-column position-static">
-                <div class="badge badge-primary d-inline-block mb-2 text-primary">World</div>
-                <h3 class="mb-0">@blog.Title</h3>
-                <div class="mb-1 text-muted">Nov 12</div>
-                <p class="card-text mb-auto">@blog.Description</p>
-                <a href="/blogs/@blog.Id" class="stretched-link">Continue reading</a>
-            </div>
-            <div class="col-auto d-none d-lg-block">
-                <img src="@blog.BannerImageUrl" width="200" height="250">
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <div class="badge badge-primary d-inline-block mb-2 text-primary">World</div>
+                    <h3 class="mb-0">@blog.Title</h3>
+                    <div class="mb-1 text-muted">@DateTime.Now.ToString("MMM dd, yyyy")</div>
+                    <p class="card-text mb-auto">@Html.Raw(blog.Description)</p>
+                    <a href="/post/@blog.Id" class="stretched-link">Continue reading</a>
+                </div>
+                <div class="col-auto d-none d-lg-block">
+                    <img src="@blog.BannerImageUrl" width="200" height="250">
 
+                </div>
             </div>
         </div>
-    </div>
     }
 </div>
 }
