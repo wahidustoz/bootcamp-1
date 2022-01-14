@@ -1,7 +1,7 @@
 @model intro.ViewModels.RegisterViewModel
 
-<input hidden="true" value="ReturnUrl">
 <form class="mt-5 col"  method="post" asp-action="Register" asp-controller="Account">
+    <input hidden="true" asp-for="@Model.ReturnUrl">
     <label asp-for="Fullname"></label>
     <input asp-for="Fullname">
     

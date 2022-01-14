@@ -1,8 +1,8 @@
 @model intro.ViewModels.LoginViewModel
 
-<input hidden="true" asp-for="ReturnUrl">
 
 <form class="mt-5 col"  method="post" asp-action="Login" asp-controller="Account">
+    <input hidden="true" asp-for="@Model.ReturnUrl">
     <label asp-for="Email"></label>
     <input asp-for="Email">
 
@@ -11,3 +11,5 @@
 
     <button type="submit">Login</button>
 </form>
+
+<a href="/account/register?returnUrl=@Model.ReturnUrl">Register</a>
