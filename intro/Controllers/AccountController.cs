@@ -60,7 +60,7 @@ public class AccountController : Controller
         var user = await _userM.FindByEmailAsync(model.Email);
         if(user != null)
         {
-            await _signInM.SignInAsync(user, false); // isPersistant
+            await _signInM.PasswordSignInAsync(user, model.Password, false, false); // isPersistant
 
             return LocalRedirect($"{model.ReturnUrl ?? "/"}");
         }

@@ -2,15 +2,20 @@
 
   <div class="container my-5">
 
-    <div class="d-inline mx-2">
-      <h2 class="bg-light">@Model.Title</h2>
-      <a class="btn btn-outline-primary" href="/edit/@Model.Id">Edit</a>
+    <div class="d-flex">
+      <div>
+        <p class="display-2">@Model.Title</p>
+      </div>
+      <a class="btn btn-outline-primary my-auto ms-auto" href="/edit/@Model.Id">Edit</a>
     </div>
-    <span class="text-muted" >@Model.CreatedAt</span>
-    @if(Model.Edited)
-    {
-      <span class="text-muted" >Edited</span>
-    }
+    <div class="d-flex">
+      @* <span class="text-muted me-2" >@User.Identity.Name</span> *@
+      <span class="text-muted my-auto small me-2 ms-auto" >@Model.CreatedAt.ToString("yyyy MMM dd")</span>
+      @if(Model.Edited)
+      {
+        <span class="text-muted" >Edited</span>
+      }
+    </div>
     @Html.Raw(Model.Content)
   </div>
 
