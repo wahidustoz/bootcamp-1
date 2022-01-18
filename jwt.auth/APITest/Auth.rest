@@ -1,0 +1,12 @@
+
+POST https://localhost:7284/api/account/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "wahid",
+    "password": "12345"
+}
+
+###
+GET https://localhost:7284/api/secret/secret HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJ3YWhpZCIsInJvbGUiOiJ1c2VyIiwibmJmIjoxNjQyNTIyMTQxLCJleHAiOjE2NDMxMjY5NDEsImlhdCI6MTY0MjUyMjE0MSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI4NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyODQifQ.iK2KhUj9btMz8w2NhwGg3nAKhAqjQ79yCYBsUJMdDyU
