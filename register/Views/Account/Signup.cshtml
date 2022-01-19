@@ -1,0 +1,58 @@
+@model register.ViewModels.SignupViewModel
+@{
+    Layout = "_AuthLayout";
+}
+
+<form class="form-signin" method="post" asp-action="Signup" asp-controller="Account">
+    <div class="text-center mb-4">
+        <img class="mb-4" src="~/icon-dark.svg" alt="" width="72"
+            height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Ilmhub IT School</h1>
+        <p>Build form controls with floating labels via the <code>:placeholder-shown</code> pseudo-element. <a
+                href="https://caniuse.com/#feat=css-placeholder-shown">Works in latest Chrome, Safari, and Firefox.</a>
+        </p>
+    </div>
+
+    <div class="form-label-group">
+        <input asp-for="Fullname" type="text" id="inputName" class="form-control" placeholder="Fullname" required="" autofocus="">
+        <label class="text-muted" asp-for="Fullname" for="inputName"></label>
+        <span asp-validation-for="Fullname" class="text-danger show"></span>
+    </div>
+
+    <div class="form-label-group">
+        <input asp-for="Birthdate" type="date" id="inputBirthdate" class="form-control" placeholder="1996/02/28" required="" autofocus="">
+        <label asp-for="Birthdate" for="inputBirthdate"></label>
+        <span asp-validation-for="Birthdate" class="text-danger"></span>
+    </div>
+
+    <div class="form-label-group">
+        <input asp-for="Email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+        <label class="text-muted" asp-for="Email" for="inputEmail"></label>
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-label-group">
+        <input asp-for="Phone" type="tel" id="inputPhone" class="form-control" placeholder="Phone" required="" autofocus="">
+        <label class="text-muted" asp-for="Phone" for="inputPhone"></label>
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <div class="form-label-group">
+        <input asp-for="Password" type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+        <label class="text-muted" asp-for="Password" for="inputPassword"></label>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-label-group">
+        <input asp-for="ConfirmPassword" type="password" id="inputConfirmPassword"  class="form-control" placeholder="Password" required="">
+        <label class="text-muted" asp-for="ConfirmPassword" for="inputConfirmPassword"></label>
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+
+    <div class="checkbox mb-3">
+        <input id="rememberme" asp-for="RememberMe" type="checkbox">
+        <label asp-for="RememberMe" for="rememberme" class="text-muted ms-2"></label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+    <p class="mt-5 mb-3 text-muted text-center">© @DateTimeOffset.Now.Year</p>
+</form>
