@@ -14,7 +14,9 @@ public class SignupViewModel : IValidatableObject
     public DateTimeOffset Birthdate { get; set; }
     
     [Required(ErrorMessage = "Telefon raqam kiritish shart!")]
-    [Phone(ErrorMessage = "Telefon raqam formati noto'g'ri.")]
+    [RegularExpression(
+        @"^[\+]?(998[-\s\.]?)([0-9]{2}[-\s\.]?)([0-9]{3}[-\s\.]?)([0-9]{2}[-\s\.]?)([0-9]{2}[-\s\.]?)$", 
+        ErrorMessage = "Telefon raqam formati noto'g'ri.")]
     [DisplayName("Telefon raqam")]
     public string Phone { get; set; }
     
@@ -32,11 +34,9 @@ public class SignupViewModel : IValidatableObject
     [Required(ErrorMessage = "Parolni Tasdiqlash shart!")]
     [Compare(nameof(Password), ErrorMessage = "Parol va Parolni Tasdiqlash mos kelmadi.")]
     [DisplayName("Parolni Tasdiqlash")]
-    public string ConfirmPassword { get; set; }
+    public string ConfirmPassword { get; set; } 
 
-    [Display(Name = "Eslab qolish")]
-    public bool RememberMe { get; set; }
-    
+    public string ReturnUrl { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

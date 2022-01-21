@@ -1,0 +1,11 @@
+@model register.ViewModels.UsersViewModel
+
+@foreach (var user in Model.Users)
+{
+    <div class="row">
+        <p>@user.Fullname</p>
+        <p>@user.Email</p>
+        <p>@user.Phone</p>
+        <p>@user.Username</p>
+    </div>
+}
