@@ -9,4 +9,6 @@ public class UsersViewModel
     public int Pages { get; set; }
     
     public int TotalUsers { get; set; }
+
+    public int Limit { get; set; }
 }

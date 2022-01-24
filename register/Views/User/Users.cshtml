@@ -1,11 +1,53 @@
 @model register.ViewModels.UsersViewModel
 
-@foreach (var user in Model.Users)
-{
-    <div class="row">
-        <p>@user.Fullname</p>
-        <p>@user.Email</p>
-        <p>@user.Phone</p>
-        <p>@user.Username</p>
-    </div>
+<table class="table table-dark shadow mt-5 mb-3 border border-5 border-light rounded-3">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Fullname</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Birthdate</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var user in Model.Users)
+        {
+            <tr>
+                <th scope="row">@((Model.Page - 1) * Model.Limit + Model.Users.ToList().IndexOf(user)+1)</th>
+                <td>@user.Fullname</td>
+                <td>@user.Email</td>
+                <td>@user.Phone</td>
+                <td>@user.Birthdate.ToString("MMM dd, yyyy")</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+@{
+    var prevClass = Model.Page > 1 ? string.Empty : "disabled";
+    var nextClass = Model.Page >= Model.Pages ? "disabled" : string.Empty;
 }
+
+<div class="d-flex">
+    <nav aria-label="Page navigation example" class="mx-auto">
+    <ul class="pagination">
+        <li class="page-item @prevClass">
+        <a class="page-link" href="/user/users?page=@(Math.Max(1, Model.Page - 1))&limit=@Model.Limit" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+        </a>
+        </li>
+        @for(int i = 1; i <= Model.Pages; i++)
+        {
+            var pageActive = i == Model.Page ? "active" : string.Empty;
+            <li class="page-item @pageActive"><a class="page-link" href="/user/users?page=@i&limit=@Model.Limit">@i</a></li>
+        }
+        <li class="page-item @nextClass">
+        <a class="page-link" href="/user/users?page=@(Math.Min(Model.Pages, Model.Page + 1))&limit=@Model.Limit" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+        </a>
+        </li>
+    </ul>
+    </nav>
+</div>

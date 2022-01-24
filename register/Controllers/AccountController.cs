@@ -73,6 +73,11 @@ public class AccountController : Controller
         }
 
         var user = _userManager.Users.FirstOrDefault(u => u.Email == model.Email);
+        if(user == default)
+        {
+            ModelState.AddModelError("Password", "Email yoki parol noto'g'ri kiritilgan.");
+            return View(model);
+        }
 
         var result = await _signinManager.PasswordSignInAsync(user, model.Password, false, false);
         if(result.Succeeded)
@@ -81,5 +86,22 @@ public class AccountController : Controller
         }
 
         return BadRequest(result.IsNotAllowed);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Signout()
+    {
+        if(_signinManager.IsSignedIn(User))
+        {
+            await _signinManager.SignOutAsync();
+
+        }
+        return LocalRedirect("/");
+    }
+
+    [HttpGet]
+    public IActionResult AccessDenied(string returnUrl)
+    {
+        return View(new { ReturnUrl = returnUrl });
     }
 }

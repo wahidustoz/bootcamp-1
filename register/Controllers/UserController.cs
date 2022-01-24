@@ -44,8 +44,9 @@ public class UserController : Controller
         {
             Users = users,
             TotalUsers = totalUsers,
-            Pages =  (int)Math.Ceiling(totalUsers / (double)page),
-            Page = page
+            Pages =  (int)Math.Ceiling(totalUsers / (double)limit),
+            Page = page,
+            Limit = limit
         });
     }
 }
